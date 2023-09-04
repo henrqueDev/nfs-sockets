@@ -32,9 +32,8 @@ public class NioService {
     }
 
     public Path rename(String path, String newName) throws IOException {
-        Path dir1 = Paths.get(HOME + "/" + path);
+        Path file1 = Paths.get(HOME + "/" + path);
 
-        Path file1 = dir1.resolve(path);
         int i = this.arquivos.indexOf(file1.getFileName().toString());
         Path fileUpdated = Files.move(file1, file1.resolveSibling(newName), StandardCopyOption.REPLACE_EXISTING);
         this.arquivos.set(i, fileUpdated.getFileName().toString());

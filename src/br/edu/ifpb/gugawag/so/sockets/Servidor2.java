@@ -38,16 +38,19 @@ public class Servidor2 {
                     String nameRenameTo = mensagem.substring(7);
                     String[] nomes = nameRenameTo.split(" ");
                     nio.rename(nomes[0], nomes[1]);
-                    dos.writeUTF("O arquivo de nome -> " + nomes + " Criado!");
+                    dos.writeUTF("O arquivo de nome -> " + nomes[0] + " renomado para -> " + nomes[1]);
                     dos.flush();
                 } else if (comando.equals("delete")) {
                     String arqToRemove = mensagem.substring(7);
                     nio.remove(arqToRemove);
-                    dos.writeUTF("O arquivo de nome -> " + arqToRemove + " Criado!");
+                    dos.writeUTF("O arquivo de nome -> " + arqToRemove + " removido!");
                     dos.flush();
                 } else {
-                    System.out.println("Hello");
+                    System.out.println("Comando invalido! Digitar novamente!");
                 }
+            } else {
+                dos.writeUTF("Comando invalido! Digitar novamente!");
+                dos.flush();
             }
         }
 
