@@ -46,7 +46,8 @@ public class Servidor2 {
                     dos.writeUTF("O arquivo de nome -> " + arqToRemove + " removido!");
                     dos.flush();
                 } else {
-                    System.out.println("Comando invalido! Digitar novamente!");
+                    dos.writeUTF("Comando invalido! Digitar novamente!");
+                    dos.flush();
                 }
             } else {
                 dos.writeUTF("Comando invalido! Digitar novamente!");
