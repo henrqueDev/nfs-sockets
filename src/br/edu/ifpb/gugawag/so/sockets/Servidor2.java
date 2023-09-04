@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Path;
 
 public class Servidor2 {
 
@@ -14,28 +15,45 @@ public class Servidor2 {
         // Configurando o socket
         ServerSocket serverSocket = new ServerSocket(7001);
         Socket socket = serverSocket.accept();
-
-        // pegando uma referência do canal de saída do socket. Ao escrever nesse canal, está se enviando dados para o
-        // servidor
+        NioService nio = new NioService();
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        // pegando uma referência do canal de entrada do socket. Ao ler deste canal, está se recebendo os dados
-        // enviados pelo servidor
         DataInputStream dis = new DataInputStream(socket.getInputStream());
 
-        // laço infinito do servidor
         while (true) {
             System.out.println("Cliente: " + socket.getInetAddress());
 
             String mensagem = dis.readUTF();
             System.out.println(mensagem);
+            if (mensagem.length() >= 6) {
+                String comando = mensagem.substring(0, 6).toLowerCase();
+                if (comando.equals("readir")) {
+                    dos.writeUTF(nio.readdir().toString());
+                    dos.flush();
+                } else if (comando.equals("create")) {
+                    String nome = mensagem.substring(7);
+                    nio.createFile(nome);
+                    dos.writeUTF("O arquivo de nome -> " + nome + " Criado!");
+                    dos.flush();
+                } else if (comando.equals("rename")) {
+                    String nameRenameTo = mensagem.substring(7);
+                    String[] nomes = nameRenameTo.split(" ");
+                    nio.rename(nomes[0], nomes[1]);
+                    dos.writeUTF("O arquivo de nome -> " + nomes + " Criado!");
+                    dos.flush();
+                } else if (comando.equals("delete")) {
+                    String arqToRemove = mensagem.substring(7);
+                    nio.remove(arqToRemove);
+                    dos.writeUTF("O arquivo de nome -> " + arqToRemove + " Criado!");
+                    dos.flush();
+                } else {
+                    System.out.println("Hello");
+                }
 
-            dos.writeUTF("Li sua mensagem: " + mensagem);
+                dos.writeUTF("Li sua mensagem: " + mensagem);
+                dos.flush();
+            }
         }
-        /*
-         * Observe o while acima. Perceba que primeiro se lê a mensagem vinda do cliente (linha 29, depois se escreve
-         * (linha 32) no canal de saída do socket. Isso ocorre da forma inversa do que ocorre no while do Cliente2,
-         * pois, de outra forma, daria deadlock (se ambos quiserem ler da entrada ao mesmo tempo, por exemplo,
-         * ninguém evoluiria, já que todos estariam aguardando.
-         */
+
     }
+
 }
