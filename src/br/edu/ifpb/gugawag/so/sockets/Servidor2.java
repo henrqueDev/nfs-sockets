@@ -48,9 +48,6 @@ public class Servidor2 {
                 } else {
                     System.out.println("Hello");
                 }
-
-                dos.writeUTF("Li sua mensagem: " + mensagem);
-                dos.flush();
             }
         }
 
