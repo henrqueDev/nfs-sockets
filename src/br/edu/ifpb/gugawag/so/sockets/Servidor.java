@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 
-public class Servidor2 {
+public class Servidor {
 
     public static void main(String[] args) throws IOException {
         System.out.println("== Servidor ==");
